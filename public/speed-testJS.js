@@ -74,7 +74,7 @@
             name: 'Download',
             type: 'gauge',
             min: 0,
-            max: 1000,
+            max: 100,
             precision: 2,
             axisLine: {
               show: true,
