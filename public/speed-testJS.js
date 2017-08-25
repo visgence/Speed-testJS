@@ -56,6 +56,18 @@
   var sliceEndValue = 0.9;
 
   function initTest() {
+      var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", '/env', false ); // false for synchronous request
+    xmlHttp.send( null );
+    var obj = JSON.parse(xmlHttp.responseText);
+    if("MIN_VALUE" in obj) {
+        var min = obj.MIN_VALUE;
+    }
+    if("MAX_VALUE" in obj) {
+        var max = obj.MAX_VALUE;
+    }
+    console.log(obj, min)
+
     function addEvent(el, ev, fn) {
       void (el.addEventListener && el.addEventListener(ev, fn, false));
       void (el.attachEvent && el.attachEvent('on' + ev, fn));
@@ -73,8 +85,8 @@
           {
             name: 'Download',
             type: 'gauge',
-            min: 0,
-            max: 100,
+            min: parseInt(min) || 0,
+            max: parseInt(max) || 100,
             precision: 2,
             axisLine: {
               show: true,

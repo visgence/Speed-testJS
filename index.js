@@ -15,7 +15,7 @@
  *  limitations under the License.
  * /
  */
-
+require('dotenv').config();
 var express = require('express');
 var path = require('path');
 var stream = require('stream');
@@ -26,8 +26,23 @@ var domain = require('./modules/domain');
 var validateIP = require('validate-ip-node');
 var os = require('os');
 var apiRouter = express.Router();
+var fs = require('fs');
 //module provides download test sizes based off of probe data
 var downloadData = require('./modules/downloadData');
+
+// Create expose version of .env file.
+// console.log(process.env)
+var data = {};
+var exposed_vars = JSON.parse(process.env.EXPOSED_VARS)
+for( var i = 0; i < exposed_vars.length; i ++){
+    data[exposed_vars[i]] = process.env[exposed_vars[i]];
+};
+
+fs.writeFile("./public/env", JSON.stringify(data), function(err) {
+    if(err) {
+        return console.log(err);
+    }
+});
 
 //set global ipv4 and ipv6 server address
 domain.setIpAddresses();
@@ -86,7 +101,7 @@ module.exports.UploadController = require('./controllers/UploadController');
 module.exports.CalculatorController = require('./controllers/CalculatorController');
 module.exports.TestServerController = require('./controllers/TestServerController');
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), {"asdf":"hello"}));
 app.listen(webPort, '::');
 app.listen(5020);
 app.listen(5021);
